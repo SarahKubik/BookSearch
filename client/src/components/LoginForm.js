@@ -9,19 +9,16 @@ import Auth from '../utils/auth';
 import { useMutation } from '@apollo/react-hooks';
 import { LOGIN_USER } from '../utils/mutations';
 
-const LoginForm = () => {
+const LoginForm = (props) => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-
-//Apollo mutation
-  const[loginUser, {error}] = useMutation(LOGIN_USER);
+  const [login, {error}] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
-
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -34,28 +31,28 @@ const LoginForm = () => {
     }
 
     try {
-      const { data } = await login({
-        variables: { ...userFormData}
+      // const response = await loginUser(userFormData);
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
+      // const { token, user } = await response.json();
+      // console.log(user);
+      // Auth.login(token);
+      const {data} = await login({
+        variables:{...userFormData}
       });
-
-      if (error) {
-        throw new Error('something went wrong!');
-      }
-
-      console.log(data.user);
       Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
-
+    // clear form values
     setUserFormData({
       username: '',
       email: '',
       password: '',
     });
   };
-
 
   return (
     <>
@@ -95,7 +92,6 @@ const LoginForm = () => {
           Submit
         </Button>
       </Form>
-      {error && <div>Login failed</div>}
     </>
   );
 };

@@ -27,7 +27,6 @@ const SignupForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -36,16 +35,19 @@ const SignupForm = () => {
     }
 
     try {
-      const { data} = await addUser({
-        variables: { ...userFormData}
+      // const response = await createUser(userFormData);
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
+
+      // execute addUser mutation and pass in variable data from form
+      const { data } = await addUser({
+        variables: { ...userFormData }
       });
-
-      if (error) {
-        throw new Error('something went wrong!');
-      }
-
-      console.log(data.user);
+      console.log(data);
       Auth.login(data.addUser.token);
+      // const { token, user } = await response.json();
+      // Auth.login(token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
@@ -57,7 +59,6 @@ const SignupForm = () => {
       password: '',
     });
   };
-
 
   return (
     <>
