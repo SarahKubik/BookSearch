@@ -71,7 +71,14 @@ const httpserver = http.createServer(app);
 app.get("/rest", function (req, res) {
     res.json({ data: "api working" });
 });
+// if we're in production, serve client/build as static assets
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 app.listen(4000, function () {
     console.log(`server running on port 4000`);
     console.log(`gql path is ${apolloServer.graphqlPath}`);
