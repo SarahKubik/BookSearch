@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server-express');
-
+// Define which  queries the front end is allowed to make and what data to returns an array for the book
 const typeDefs = gql`
     type User {
         _id: ID
