@@ -1,21 +1,24 @@
-
 // see SignupForm.js for comments
-import React, { useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+
+import { useMutation } from '@apollo/react-hooks';
 import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
-  // set initial form state
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
-
-  const [login] = useMutation(LOGIN_USER);
-
-  // set state for form validation
   const [validated] = useState(false);
-  // set state for alert
   const [showAlert, setShowAlert] = useState(false);
+  const [login, { error }] = useMutation(LOGIN_USER);
+
+  useEffect(() => {
+    if (error) {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+  }, [error]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -34,19 +37,17 @@ const LoginForm = () => {
 
     try {
       const { data } = await login({
-        variables: { ...userFormData }
+        variables: { ...userFormData },
       });
+
       console.log(data);
-
       Auth.login(data.login.token);
-
     } catch (e) {
       console.error(e);
-      setShowAlert(true);
     }
 
+    // clear form values
     setUserFormData({
-      username: '',
       email: '',
       password: '',
     });
@@ -83,10 +84,7 @@ const LoginForm = () => {
           />
           <Form.Control.Feedback type='invalid'>Password is required!</Form.Control.Feedback>
         </Form.Group>
-        <Button
-          disabled={!(userFormData.email && userFormData.password)}
-          type='submit'
-          variant='success'>
+        <Button disabled={!(userFormData.email && userFormData.password)} type='submit' variant='success'>
           Submit
         </Button>
       </Form>
