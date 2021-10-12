@@ -1,10 +1,10 @@
 const { User, Book } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
-const { param } = require('../routes');
+// const { param } = require('../routes');
 
 const resolvers = {
-
+// get and return all documents from the database collection
     Query: {
 
         //get a user by username
