@@ -7,7 +7,8 @@ mongoose.connect(
       useUnifiedTopology: true,
       useCreateIndex: true,
       useFindAndModify: false,
-    }
-);
+    }).catch ((err) => {
+      console.error(err);
+    })
 
-module.exports = mongoose.connection;
+    module.exports = mongoose.connection;
