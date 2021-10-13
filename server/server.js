@@ -37,11 +37,11 @@ app.get("/rest", function (req, res) {
 
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../test/my-app/build")));
+  app.use(express.static(path.join(__dirname, "../client/build")));
 }
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../test/my-app/build/index.html"));
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
 db.once("open", () => {
@@ -49,4 +49,7 @@ db.once("open", () => {
     console.log(`API server running on port ${PORT}!`);
     console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
   });
+});
+db.on("error", (err) => {
+  console.error("MongoDB connection error: ", err);
 });
