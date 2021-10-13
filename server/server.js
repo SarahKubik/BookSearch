@@ -36,13 +36,13 @@ app.get("/rest", function (req, res) {
 });
 
 
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static(path.join(__dirname, "../test/my-app/build")));
-// }
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../test/my-app/build")));
+}
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../test/my-app/build/index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../test/my-app/build/index.html"));
+});
 
 db.once("open", () => {
   app.listen(PORT, () => {
